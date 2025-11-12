@@ -1,0 +1,31 @@
+title: "Oheneba Aggrey"
+tagline: "Sustainability Enthusiast"
+description: "Portfolio across academic, work, and extras."
+url: ""
+baseurl: ""
+
+# IMPORTANT: set this to your Cloudflare R2 *public* bucket base.
+# Example:
+# r2_base: "https://pub-ABCDEFGH1234567890.r2.dev/portfoliositefiles/Site Files"
+# (Spaces are fine; the templates will URI-escape filenames.)
+r2_base: "https://pub-71ec9cd99b00422cacd3374104eb4649.r2.dev/portfoliositefiles/Site Files"
+
+markdown: kramdown
+permalink: pretty
+
+collections:
+  projects:
+    output: true
+    permalink: /projects/:name/
+
+defaults:
+  - scope: { path: "", type: "projects" }
+    values:
+      layout: project
+      thumbnail: ""
+
+nav:
+  - { title: "Home",     url: "/" }
+  - { title: "Academic", url: "/academic/" }
+  - { title: "Work",     url: "/work/" }
+  - { title: "Extras",   url: "/extras/" }

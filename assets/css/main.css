@@ -1,0 +1,24 @@
+:root{--bg:#0b0b10;--text:#eaeaf0;--muted:#b6b6c9;--accent:#8b5cf6;--teal:#5ab0c8;--purple:#5b2a86;--lav:#a78bfa;--card:#14141c;--border:#2b2b3a}
+*{box-sizing:border-box}html,body{margin:0;padding:0;background:var(--bg);color:var(--text);font:16px/1.55 system-ui,-apple-system,Segoe UI,Roboto}
+a{color:inherit;text-decoration:none}img{max-width:100%;height:auto;display:block}
+.site-header{display:flex;justify-content:space-between;align-items:center;padding:1rem 1.25rem;border-bottom:1px solid var(--border);position:sticky;top:0;background:rgba(11,11,16,.85);backdrop-filter:blur(8px)}
+.muted{color:var(--muted);margin-left:.5rem}
+.site-nav a{margin-left:1rem;color:var(--muted)}.site-nav a[aria-current="page"]{color:#fff;font-weight:600}
+.site-main{max-width:1100px;margin:0 auto;padding:1.25rem}
+.hero{padding:2rem 0;border-bottom:1px solid var(--border)}
+.category-strip{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin:2rem 0}
+.cat-card{display:grid;place-items:center;height:120px;border-radius:.75rem;color:#fff;font-weight:700;letter-spacing:.03em}
+.cat-card.academic{background:var(--teal)}.cat-card.work{background:var(--purple)}.cat-card.extras{background:var(--lav);color:#1a1430}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:1rem}
+.cards .card{background:var(--card);border:1px solid var(--border);border-radius:.75rem;overflow:hidden;display:flex;flex-direction:column;transition:transform .12s,border-color .12s}
+.cards .card:hover{transform:translateY(-2px);border-color:var(--accent)}
+.cards img{aspect-ratio:16/9;object-fit:cover}
+.card-body{padding:.75rem .85rem}.card-body h3{margin:.25rem 0}.card-body p{margin:0;color:var(--muted)}
+.project-header .meta{list-style:none;padding:0;margin:.25rem 0;display:flex;gap:.5rem;flex-wrap:wrap;color:var(--muted);font-size:.9rem}
+.pill{background:#1b1b26;border:1px solid var(--border);padding:.15rem .5rem;border-radius:999px}
+.cover{margin:1rem 0;border:1px solid var(--border);border-radius:.5rem}
+.project-gallery{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:.75rem;margin:1.5rem 0}
+.project-gallery img{border-radius:.5rem;border:1px solid var(--border)}
+.video-embed{position:relative;padding-top:56.25%}.video-embed iframe{position:absolute;inset:0;width:100%;height:100%;border:0;border-radius:.5rem}
+.site-footer{border-top:1px solid var(--border);padding:1.25rem;text-align:center;color:var(--muted)}
+@media (max-width:680px){.category-strip{grid-template-columns:1fr}}

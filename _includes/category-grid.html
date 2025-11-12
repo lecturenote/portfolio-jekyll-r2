@@ -1,0 +1,18 @@
+{% assign items = site.projects | where: "category", include.category | sort: 'order' %}
+<div class="grid cards">
+  {% for p in items %}
+    <a class="card" href="{{ p.url | relative_url }}">
+      {% capture thumb %}{{ p.thumbnail }}{% endcapture %}
+      {% if p.thumbnail_file and site.r2_base %}
+        {% capture thumb %}{{ site.r2_base }}/{{ p.thumbnail_file | uri_escape }}{% endcapture %}
+      {% elsif p.cover_file and site.r2_base %}
+        {% capture thumb %}{{ site.r2_base }}/{{ p.cover_file | uri_escape }}{% endcapture %}
+      {% endif %}
+      {% if thumb and thumb != '' %}<img src="{{ thumb }}" alt="{{ p.title }}" loading="lazy">{% endif %}
+      <div class="card-body">
+        <h3>{{ p.title }}</h3>
+        {% if p.summary %}<p>{{ p.summary }}</p>{% endif %}
+      </div>
+    </a>
+  {% endfor %}
+</div>
