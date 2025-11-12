@@ -34,16 +34,17 @@ layout: default
     {% endif %}
 
     {% for item in imgs %}
-      {% assign url = item %}
-      {% unless url contains '://' or url startswith '/' %}
-        {% if r2 != '' %}
-          {% capture url %}{{ r2 }}/{{ item | uri_escape }}{% endcapture %}
-        {% endif %}
-      {% endunless %}
-      <a class="lb" href="{{ url }}"><img src="{{ url }}" loading="lazy" alt=""></a>
-    {% endfor %}
-  </section>
+  {% assign url = item %}
+  {% if url %}
+    {% unless url contains '://' or url[0] == '/' %}
+      {% if r2 != '' %}
+        {% capture url %}{{ r2 }}/{{ item | uri_escape }}{% endcapture %}
+      {% endif %}
+    {% endunless %}
   {% endif %}
+  <a class="lb" href="{{ url }}"><img src="{{ url }}" loading="lazy" alt=""></a>
+{% endfor %}
+
 
   {% comment %} Video: prefer youtube_id; else absolute page.video; else filename page.video_file {% endcomment %}
   {% if page.youtube_id %}
