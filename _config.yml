@@ -8,7 +8,7 @@ baseurl: "/portfolio-jekyll-r2"
 # Example:
 # r2_base: "https://pub-ABCDEFGH1234567890.r2.dev/portfoliositefiles/Site Files"
 # (Spaces are fine; the templates will URI-escape filenames.)
-r2_base: r2_base: "https://pub-71ec9cd99b00422cacd3374104eb4649.r2.dev/portfoliositefiles/Site%20Files"
+r2_base: "https://pub-71ec9cd99b00422cacd3374104eb4649.r2.dev/portfoliositefiles/Site%20Files"
 
 
 markdown: kramdown
