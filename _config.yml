@@ -1,14 +1,15 @@
 title: "Oheneba Aggrey"
 tagline: "Sustainability Enthusiast"
 description: "Portfolio across academic, work, and extras."
-url: ""
-baseurl: ""
+url: "https://lecturenote.github.io/"
+baseurl: "/portfolio-jekyll-r2"
 
 # IMPORTANT: set this to your Cloudflare R2 *public* bucket base.
 # Example:
 # r2_base: "https://pub-ABCDEFGH1234567890.r2.dev/portfoliositefiles/Site Files"
 # (Spaces are fine; the templates will URI-escape filenames.)
-r2_base: "https://pub-71ec9cd99b00422cacd3374104eb4649.r2.dev/portfoliositefiles/Site Files"
+r2_base: r2_base: "https://pub-71ec9cd99b00422cacd3374104eb4649.r2.dev/portfoliositefiles/Site%20Files"
+
 
 markdown: kramdown
 permalink: pretty
