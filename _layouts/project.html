@@ -12,12 +12,14 @@ layout: default
       {% if page.year %}<li>{{ page.year }}</li>{% endif %}
     </ul>
 
-    {% comment %} Cover image: either local URL (page.cover) or filename in bucket (page.cover_file) {% endcomment %}
-    {% assign cover_url = page.cover %}
-    {% if page.cover_file and r2 != '' %}
+    {%- comment -%} Resolve cover image (local URL, or filename in R2) {%- endcomment -%}
+    {% assign cover_url = nil %}
+    {% if page.cover %}
+      {% assign cover_url = page.cover %}
+    {% elsif page.cover_file and r2 != '' %}
       {% capture cover_url %}{{ r2 }}/{{ page.cover_file | uri_escape }}{% endcapture %}
     {% endif %}
-    {% if cover_url and cover_url != '' %}
+    {% if cover_url %}
       <img class="cover" src="{{ cover_url }}" alt="{{ page.title }} cover">
     {% endif %}
   </header>
@@ -26,45 +28,59 @@ layout: default
     {{ content }}
   </section>
 
-  {% if page.gallery or page.gallery_files %}
+  {%- comment -%} Gallery (list of filenames or absolute URLs) {%- endcomment -%}
+  {% assign imgs = page.gallery_files | default: page.gallery %}
+  {% if imgs %}
   <section class="project-gallery">
-    {% assign imgs = page.gallery %}
-    {% if page.gallery_files %}
-      {% assign imgs = page.gallery_files %}
+    {% for item in imgs %}
+      {% assign url = item %}
+      {% if url %}
+        {% assign firstchar = url | slice: 0, 1 %}
+        {% if url contains '://' or firstchar == '/' %}
+          {# keep absolute/path URL as-is #}
+        {% elsif r2 != '' %}
+          {% capture url %}{{ r2 }}/{{ item | uri_escape }}{% endcapture %}
+        {% endif %}
+      {% endif %}
+      <a class="lb" href="{{ url }}"><img src="{{ url }}" loading="lazy" alt=""></a>
+    {% endfor %}
+  </section>
+  {% endif %}
+
+  {%- comment -%} Video (YouTube, absolute URL, or filename in R2) {%- endcomment -%}
+  {% if page.youtube_id %}
+    <section class="project-video">
+      <div class="video-embed">
+        <iframe
+          src="https://www.youtube.com/embed/{{ page.youtube_id }}"
+          title="YouTube video"
+          frameborder="0"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowfullscreen></iframe>
+      </div>
+    </section>
+  {% else %}
+    {% assign poster_url = nil %}
+    {% if page.poster %}
+      {% assign poster_url = page.poster %}
+    {% elsif page.poster_file and r2 != '' %}
+      {% capture poster_url %}{{ r2 }}/{{ page.poster_file | uri_escape }}{% endcapture %}
     {% endif %}
 
-    {% for item in imgs %}
-  {% assign url = item %}
-  {% if url %}
-    {% unless url contains '://' or url[0] == '/' %}
-      {% if r2 != '' %}
-        {% capture url %}{{ r2 }}/{{ item | uri_escape }}{% endcapture %}
-      {% endif %}
-    {% endunless %}
-  {% endif %}
-  <a class="lb" href="{{ url }}"><img src="{{ url }}" loading="lazy" alt=""></a>
-{% endfor %}
+    {% assign video_url = nil %}
+    {% if page.video %}
+      {% assign video_url = page.video %}
+    {% elsif page.video_file and r2 != '' %}
+      {% capture video_url %}{{ r2 }}/{{ page.video_file | uri_escape }}{% endcapture %}
+    {% endif %}
 
-
-  {% comment %} Video: prefer youtube_id; else absolute page.video; else filename page.video_file {% endcomment %}
-  {% if page.youtube_id %}
-  <section class="project-video">
-    <div class="video-embed">
-      <iframe src="https://www.youtube.com/embed/{{ page.youtube_id }}" title="YouTube video" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-    </div>
-  </section>
-  {% elsif page.video %}
-  <section class="project-video">
-    <video controls preload="metadata" {% if page.poster or page.poster_file %}poster="{% if page.poster_file and r2 != '' %}{{ r2 }}/{{ page.poster_file | uri_escape }}{% else %}{{ page.poster }}{% endif %}"{% endif %}>
-      <source src="{{ page.video }}" type="video/mp4">
-    </video>
-  </section>
-  {% elsif page.video_file and r2 != '' %}
-  <section class="project-video">
-    <video controls preload="metadata" {% if page.poster_file %}poster="{{ r2 }}/{{ page.poster_file | uri_escape }}"{% endif %}>
-      <source src="{{ r2 }}/{{ page.video_file | uri_escape }}" type="video/mp4">
-      Your browser does not support the video tag.
-    </video>
-  </section>
+    {% if video_url %}
+    <section class="project-video">
+      <video controls preload="metadata"{% if poster_url %} poster="{{ poster_url }}"{% endif %}>
+        <source src="{{ video_url }}" type="video/mp4">
+        Your browser does not support the video tag.
+      </video>
+    </section>
+    {% endif %}
   {% endif %}
 </article>
