@@ -34,7 +34,7 @@ Sustainability Enthusiast
 
 <div class="wrapper home-hero">
   <h1>Oheneba Aggrey</h1>
-  <p class="lead">Sustainability Enthusiast • Industrial & analytics‑driven design. Selected projects below.</p>
+  <p class="lead">Sustainability Enthusiast • Industrial & analytics‑driven design. Selected work below.</p>
 
   <div class="home-tiles">
     <a class="home-tile is-academic" href="/academic/">
@@ -42,13 +42,11 @@ Sustainability Enthusiast
       <p>Research, CAD/FEA, simulations.</p>
       <span class="tile-icon">🎓</span>
     </a>
-
     <a class="home-tile is-work" href="/work/">
       <h3>Work</h3>
       <p>PV installs, process planning, deliverables.</p>
       <span class="tile-icon">🛠️</span>
     </a>
-
     <a class="home-tile is-extras" href="/extras/">
       <h3>Extras</h3>
       <p>Prototypes, awards, summer schools.</p>
@@ -56,3 +54,4 @@ Sustainability Enthusiast
     </a>
   </div>
 </div>
+
