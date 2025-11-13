@@ -1,10 +1,15 @@
 ---
-title: Fixed-Wing Drone
+title: Fixed‑Wing Drone
 category: academic
-summary: Aerodynamic and structural exploration with CAD and simulation.
+order: 1
+summary: Aerodynamic studies and CAD snapshots.
+thumbnail_file: "Picture5.png"
+cover_file:     "Picture5.png"
 gallery_files:
   - "Picture5.png"
   - "Picture6.png"
-  - "Picture7.jpg"
+  - "Picture7.png"
+  - "Picture1.png"
+  - "Picture1_edited.png"
+  - "Picture2.png"
 ---
-Design, CAD, and simulation snapshots for a student fixed-wing build.

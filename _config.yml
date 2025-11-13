@@ -1,10 +1,10 @@
 title: "Oheneba Aggrey"
 tagline: "Sustainability Enthusiast"
 description: "Portfolio across academic, work, and extras."
-url: "https://lecturenote.github.io"      # your user pages origin
-baseurl: "/portfolio-jekyll-r2"           # your repo name
+url: "https://lecturenote.github.io/"
+baseurl: "/portfolio-jekyll-r2"
 
-# ✅ R2 public base (NO bucket segment)
+# IMPORTANT: your public Cloudflare R2 bucket base (spaces will be URI-escaped in templates)
 r2_base: "https://pub-71ec9cd99b00422cacd3374104eb4649.r2.dev/Site%20Files"
 
 markdown: kramdown
@@ -20,9 +20,10 @@ defaults:
     values:
       layout: project
       thumbnail: ""
+      summary: ""
 
 nav:
-  - { title: "Home",     url: "/" }
+  - { title: "Home",    url: "/" }
   - { title: "Academic", url: "/academic/" }
   - { title: "Work",     url: "/work/" }
   - { title: "Extras",   url: "/extras/" }

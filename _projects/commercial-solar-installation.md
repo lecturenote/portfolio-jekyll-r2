@@ -1,13 +1,14 @@
 ---
-title: Commercial Solar Installation
+title: Residential Solar Installation
 category: work
-summary: Site layout, aerial validation, and build photos.
-thumbnail_file: "eni.jpg"
+order: 3
+summary: Roof install logistics and close‑ups.
+thumbnail_file: "photo_2024-02-05_10-36-39.jpg"
+cover_file:     "photo_2024-02-05_10-36-39.jpg"
 gallery_files:
-  - "eni.jpg"
-  - "bank of africa.png"
+  - "photo_2024-02-05_07-31-34.jpg"
+  - "photo_2024-02-05_10-36-39.jpg"
   - "photo_2024-02-25_10-42-28.jpg"
-  - "photo_2024-02-25_10-42-41.jpg"
-  - "photo_2024-05-15_07-31-34.jpg"
+  - "photo_2024-02-25_10-43-09.jpg"
+  - "photo_2024-02-25_10-43-13.jpg"
 ---
-Survey, layout, proof shots, and commissioning photos.

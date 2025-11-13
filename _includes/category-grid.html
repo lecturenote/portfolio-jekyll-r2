@@ -1,53 +1,24 @@
-{% comment %}
-  Category grid with robust thumbnail selection.
-  Priority:
-    1) p.thumbnail (absolute URL)
-    2) p.thumbnail_file + site.r2_base
-    3) p.cover (absolute URL)
-    4) p.cover_file + site.r2_base
-    5) first of p.gallery (absolute URLs you pasted)
-    6) first of p.gallery_files + site.r2_base
-{% endcomment %}
-
-{% assign items = site.projects | where: "category", include.category | sort: 'order' %}
-
+{% assign items = site.projects | where: "category", include.category | sort: "order" %}
 <div class="grid cards">
-  {% for p in items %}
-    <a class="card" href="{{ p.url | relative_url }}">
-      {%- assign thumb = nil -%}
-
-      {%- if p.thumbnail and p.thumbnail contains '://' -%}
-        {%- assign thumb = p.thumbnail -%}
-      {%- endif -%}
-
-      {%- if thumb == nil and p.thumbnail_file and site.r2_base -%}
+{% for p in items %}
+  <a class="card" href="{{ p.url | relative_url }}">
+    {%- assign thumb = p.thumbnail -%}
+    {%- if thumb == nil or thumb == "" -%}
+      {%- if p.thumbnail_file and site.r2_base -%}
         {%- capture thumb -%}{{ site.r2_base }}/{{ p.thumbnail_file | uri_escape }}{%- endcapture -%}
-      {%- endif -%}
-
-      {%- if thumb == nil and p.cover and p.cover contains '://' -%}
-        {%- assign thumb = p.cover -%}
-      {%- endif -%}
-
-      {%- if thumb == nil and p.cover_file and site.r2_base -%}
+      {%- elsif p.cover_file and site.r2_base -%}
         {%- capture thumb -%}{{ site.r2_base }}/{{ p.cover_file | uri_escape }}{%- endcapture -%}
-      {%- endif -%}
-
-      {%- if thumb == nil and p.gallery and p.gallery.size > 0 -%}
-        {%- assign g0 = p.gallery[0] -%}
-        {%- if g0 contains '://' -%}{%- assign thumb = g0 -%}{%- endif -%}
-      {%- endif -%}
-
-      {%- if thumb == nil and p.gallery_files and p.gallery_files.size > 0 and site.r2_base -%}
+      {%- elsif p.gallery_files and p.gallery_files.size > 0 and site.r2_base -%}
         {%- capture thumb -%}{{ site.r2_base }}/{{ p.gallery_files[0] | uri_escape }}{%- endcapture -%}
+      {%- elsif p.gallery and p.gallery.size > 0 -%}
+        {%- assign thumb = p.gallery[0] -%} {# absolute URL #}
       {%- endif -%}
-
-      {% if thumb %}
-        <img src="{{ thumb }}" alt="{{ p.title }}" loading="lazy">
-      {% endif %}
-      <div class="card-body">
-        <h3>{{ p.title }}</h3>
-        {% if p.summary %}<p>{{ p.summary }}</p>{% endif %}
-      </div>
-    </a>
-  {% endfor %}
+    {%- endif -%}
+    {% if thumb %}<img src="{{ thumb }}" alt="{{ p.title }}" loading="lazy">{% endif %}
+    <div class="card-body">
+      <h3>{{ p.title }}</h3>
+      {% if p.summary %}<p>{{ p.summary }}</p>{% endif %}
+    </div>
+  </a>
+{% endfor %}
 </div>

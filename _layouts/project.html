@@ -4,59 +4,42 @@ layout: default
 {% assign r2 = site.r2_base | default: '' %}
 
 <article class="project">
-  <header class="project-header">
-    <h1>{{ page.title }}</h1>
-    <ul class="meta">
-      {% if page.category %}<li class="pill">{{ page.category | capitalize }}</li>{% endif %}
-      {% if page.role %}<li>{{ page.role }}</li>{% endif %}
-      {% if page.year %}<li>{{ page.year }}</li>{% endif %}
-    </ul>
-
-    {%- assign cover_url = nil -%}
-    {% if page.show_cover != false %}
-      {% if page.cover and page.cover contains '://' %}
-        {% assign cover_url = page.cover %}
-      {% elsif page.cover_file and r2 != '' %}
-        {% capture cover_url %}{{ r2 }}/{{ page.cover_file | uri_escape }}{% endcapture %}
-      {% endif %}
-    {% endif %}
-    {% if cover_url %}
-      <img class="cover" src="{{ cover_url }}" alt="{{ page.title }} cover">
-    {% endif %}
-  </header>
-
-  <section class="project-body">
-    {{ content }}
-  </section>
-
-  {%- comment -%} Accept either absolute URLs (page.gallery) or file names (page.gallery_files) {%- endcomment -%}
-  {% assign imgs_abs = page.gallery | default: empty %}
-  {% assign imgs_files = page.gallery_files | default: empty %}
-
-  {% if imgs_abs.size > 0 or imgs_files.size > 0 %}
-  <section class="project-gallery">
-    {% for url in imgs_abs %}
-      <a class="lb" href="{{ url }}"><img src="{{ url }}" loading="lazy" alt=""></a>
-    {% endfor %}
-    {% for f in imgs_files %}
-      {% capture url %}{{ r2 }}/{{ f | uri_escape }}{% endcapture %}
-      <a class="lb" href="{{ url }}"><img src="{{ url }}" loading="lazy" alt=""></a>
-    {% endfor %}
-  </section>
+  {% if page.summary %}
+  <section class="project-body"><p>{{ page.summary }}</p></section>
   {% endif %}
 
-  {% assign video_url = nil %}
-  {% if page.video and page.video contains '://' %}
-    {% assign video_url = page.video %}
-  {% elsif page.video_file and r2 != '' %}
-    {% capture video_url %}{{ r2 }}/{{ page.video_file | uri_escape }}{% endcapture %}
+  {% assign imgs = page.gallery_files | default: page.gallery %}
+  {% if imgs and imgs.size > 0 %}
+  <section class="project-gallery">
+    {% for item in imgs %}
+      {% assign url = item %}
+      {% assign first = url | slice: 0, 1 %}
+      {% unless url contains '://' or first == '/' %}
+        {% if r2 != '' %}{% capture url %}{{ r2 }}/{{ item | uri_escape }}{% endcapture %}{% endif %}
+      {% endunless %}
+
+      {% assign id = forloop.index | prepend: 'img-' %}
+      <a class="thumb" href="#{{ id }}"><img src="{{ url }}" loading="lazy" alt=""></a>
+      <div class="lightbox" id="{{ id }}">
+        <a class="close" href="#" aria-label="Close"></a>
+        {% if forloop.index0 > 0 %}<a class="nav prev" href="#img-{{ forloop.index0 }}"></a>{% endif %}
+        {% if forloop.index < imgs.size %}<a class="nav next" href="#img-{{ forloop.index | plus: 1 }}"></a>{% endif %}
+        <img src="{{ url }}" alt="">
+      </div>
+    {% endfor %}
+  </section>
   {% endif %}
 
   {% assign poster_url = nil %}
-  {% if page.poster and page.poster contains '://' %}
-    {% assign poster_url = page.poster %}
-  {% elsif page.poster_file and r2 != '' %}
+  {% if page.poster %}{% assign poster_url = page.poster %}{% endif %}
+  {% if poster_url == nil and page.poster_file and r2 != '' %}
     {% capture poster_url %}{{ r2 }}/{{ page.poster_file | uri_escape }}{% endcapture %}
+  {% endif %}
+
+  {% assign video_url = nil %}
+  {% if page.video %}{% assign video_url = page.video %}{% endif %}
+  {% if video_url == nil and page.video_file and r2 != '' %}
+    {% capture video_url %}{{ r2 }}/{{ page.video_file | uri_escape }}{% endcapture %}
   {% endif %}
 
   {% if video_url %}
