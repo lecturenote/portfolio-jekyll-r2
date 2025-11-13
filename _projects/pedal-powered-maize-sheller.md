@@ -2,7 +2,7 @@
 title: Pedal‑Powered Maize Sheller
 category: extras
 summary: Proof‑of‑concept and fabrication.
-cover_file: "maize1.png"
+thumbnail_file: "maize1.png"
 gallery_files:
   - "maize1.png"
   - "maize2.png"

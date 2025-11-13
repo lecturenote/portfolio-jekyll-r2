@@ -2,6 +2,7 @@
 title: Alpitronic Process Planning
 category: work
 summary: Layout, resource plan, and supplier coordination.
+thumbnail_file: "vistable.png"
 gallery_files:
   - "vistable.png"
   - "Screenshot 2024-02-25 123430.png"
