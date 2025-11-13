@@ -1,56 +1,374 @@
-/* ====== Cards for Work/Extras index ====== */
-.grid.cards {
-  --gap: 16px;
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-  gap: var(--gap);
+/* ==========================================================================
+   Oheneba – Dark Portfolio CSS (drop-in replacement)
+   File: assets/css/main.css
+   --------------------------------------------------------------------------
+   Design goals:
+   • Striking dark theme with crisp typography
+   • Uniform card thumbnails (same height) using aspect-ratio + object-fit
+   • Responsive, breathable grid with elegant hover "lift"
+   • Works with your existing markup (cards, project grids, galleries)
+   • Graceful placeholder when an image is missing
+   ========================================================================== */
+
+/* ------------------------------ Tokens ---------------------------------- */
+
+:root {
+  /* Color system */
+  --bg:             #0b0f14;
+  --surface:        #10151d;
+  --surface-2:      #151b25;
+  --border:         #1d2531;
+  --text:           #e9edf3;
+  --muted:          #a7b0bf;
+  --primary:        #8b5cf6;  /* violet */
+  --primary-600:    #7c3aed;
+  --accent:         #22d3ee;  /* cyan */
+  --focus:          #22d3ee;
+
+  /* Radii, shadows, spacing */
+  --radius:         14px;
+  --radius-sm:      10px;
+  --shadow-1:       0 8px 24px rgba(0,0,0,.35);
+  --shadow-2:       0 14px 40px rgba(0,0,0,.45);
+
+  /* Fluid type scale */
+  --step--1: clamp(.84rem, .82rem + .1vw, .9rem);
+  --step-0:  clamp(1.00rem, .96rem + .3vw, 1.125rem);
+  --step-1:  clamp(1.25rem, 1.06rem + .8vw, 1.5rem);
+  --step-2:  clamp(1.5rem,  1.2rem  + 1.4vw, 1.9rem);
+  --step-3:  clamp(1.9rem,  1.4rem  + 2.2vw, 2.4rem);
+  --step-4:  clamp(2.4rem,  1.9rem  + 3.0vw, 3.0rem);
+
+  /* Spacing scale */
+  --space-1: .25rem;
+  --space-2: .5rem;
+  --space-3: .75rem;
+  --space-4: 1rem;
+  --space-5: 1.25rem;
+  --space-6: 1.5rem;
+  --space-7: 2rem;
+  --space-8: 2.5rem;
+  --space-9: 3rem;
+
+  /* Card/media */
+  --card-aspect: 16/9; /* tune to 4/3, 3/2 if you prefer */
 }
-.card {
+
+/* ------------------------------ Reset ----------------------------------- */
+
+*,
+*::before,
+*::after { box-sizing: border-box; }
+
+html { color-scheme: dark; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto,
+               Helvetica Neue, Arial, "Noto Sans", "Apple Color Emoji",
+               "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji", sans-serif;
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  accent-color: var(--primary);
+}
+
+img, svg, video { max-width: 100%; display: block; }
+img { height: auto; }
+
+/* Remove link underlines but preserve accessible hover/focus */
+a { color: inherit; text-decoration: none; }
+a:hover { color: var(--primary); }
+a:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+  border-radius: var(--radius-sm);
+}
+
+/* ------------------------------ Layout ---------------------------------- */
+
+/* A centered content wrapper. If your templates already have one, this will enhance it. */
+.wrapper, .container {
+  width: min(1200px, 100% - 2 * var(--space-7));
+  margin-inline: auto;
+  padding-block: var(--space-7);
+}
+
+/* Page titles */
+h1 { font-size: var(--step-4); line-height: 1.15; margin: 0 0 var(--space-6); letter-spacing: .2px; }
+h2 { font-size: var(--step-2); margin: var(--space-7) 0 var(--space-4); }
+h3 { font-size: var(--step-1); margin: var(--space-5) 0 var(--space-3); }
+p, li { font-size: var(--step-0); color: var(--text); }
+.muted { color: var(--muted); }
+
+/* Sticky glass header (optional: matches your existing header if present) */
+.site-header {
+  position: sticky; top: 0; z-index: 50;
+  border-bottom: 1px solid var(--border);
+  background: rgba(11, 15, 20, .7);
+  backdrop-filter: blur(10px) saturate(1.1);
+}
+.site-header .site-nav a {
+  padding: .65rem .9rem; border-radius: 10px;
+}
+.site-header .site-nav a:hover,
+.site-header .site-nav a[aria-current="page"] {
+  background: var(--surface-2); color: var(--accent);
+}
+
+/* ------------------------------ Cards ----------------------------------- */
+
+/* Any of these container class names will render a responsive card grid.
+   (No HTML changes needed—this covers common names you already use.) */
+.cards,
+.card-grid,
+.project-grid,
+.projects,
+.tiles {
   display: grid;
-  grid-template-rows: auto 1fr;
-  border: 1px solid #2f2f3a;
-  background: #16161c;
-  border-radius: 12px;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: var(--space-7);
+}
+
+/* Card frame */
+.card,
+article.card,
+.projects article,
+.project-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
   overflow: hidden;
-  text-decoration: none; color: inherit;
-  transition: transform .08s ease-in-out;
+  box-shadow: var(--shadow-1);
+  transition: transform .22s ease, box-shadow .22s ease, border-color .22s ease;
 }
-.card:hover { transform: translateY(-2px); }
-.card img {
-  width: 100%; aspect-ratio: 16/10; object-fit: cover; display: block;
+
+/* Hover lift */
+.card:hover,
+.projects article:hover,
+.project-card:hover {
+  transform: translateY(-6px);
+  box-shadow: var(--shadow-2);
+  border-color: #2a3547;
 }
-.card .card-body { padding: 14px 16px 18px; }
-.card .card-body h3 { margin: 0 0 6px; font-size: 1.05rem; }
-.card .card-body p { margin: 0; color: #c8c8d0; font-size: .95rem; }
 
-/* ====== Project pages: gallery-first, equal thumbs ====== */
-.project-body { margin: 0 0 18px; }
+/* Uniform media area on cards (same height thumbnails) */
+.card-media,
+.project-thumb,
+.thumb,
+figure.thumb {
+  background: var(--surface-2);
+  aspect-ratio: var(--card-aspect);
+  overflow: hidden;
+}
 
-.project-gallery {
-  --gap: 12px;
+.card-media img,
+.project-thumb img,
+.thumb img,
+figure.thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;         /* crops but keeps uniform sizing */
+  object-position: center;
+}
+
+/* If a card has no <img>, show a tasteful placeholder. Requires :has() (all modern browsers). */
+.card-media:not(:has(img))::after,
+.project-thumb:not(:has(img))::after,
+.thumb:not(:has(img))::after {
+  content: "No image";
+  color: var(--muted);
+  font-size: var(--step-0);
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-  gap: var(--gap);
-}
-.project-gallery a.thumb {
-  border: 1px solid #2f2f3a; border-radius: 10px; overflow: hidden; background: #0f0f14;
-}
-.project-gallery img {
-  width: 100%; aspect-ratio: 4/3; object-fit: cover; display: block;
+  place-content: center;
+  width: 100%;
+  height: 100%;
 }
 
-/* ====== Lightweight lightbox (no JS) ====== */
-.lightbox { position: fixed; inset: 0; background: rgba(0,0,0,.92);
-  opacity: 0; pointer-events: none; transition: .2s; display: grid; place-items: center; padding: 4vmin; z-index: 9999; }
-.lightbox:target { opacity: 1; pointer-events: auto; }
-.lightbox img { max-width: 96vw; max-height: 92vh; border-radius: 6px; border: 1px solid #2f2f3a; }
-.lightbox .close, .lightbox .nav { position: fixed; width: 38px; height: 38px; border-radius: 999px; background: rgba(255,255,255,.16); }
-.lightbox .close { top: 14px; right: 14px; }
-.lightbox .prev { top: 50%; left: 14px; transform: translateY(-50%); }
-.lightbox .next { top: 50%; right: 14px; transform: translateY(-50%); }
-
-/* ====== Videos ====== */
-.project-video { margin-top: 16px; }
-.project-video video, .video-embed iframe {
-  width: 100%; max-height: 70vh; border:1px solid #2f2f3a; border-radius: 10px; background: #000;
+/* Body of the card */
+.card-body,
+.project-body,
+article.card .content,
+.projects article .content {
+  padding: var(--space-5);
 }
+
+.card-title,
+.project-title,
+article.card h3,
+.projects article h3 {
+  margin: 0 0 .35rem 0;
+  font-size: var(--step-1);
+  font-weight: 700;
+}
+
+.card-desc,
+.projects article p,
+article.card p {
+  margin: 0;
+  color: var(--muted);
+}
+
+/* ------------------------------ Galleries -------------------------------- */
+
+/* Any of these container names render a clean, even gallery grid. */
+.gallery,
+.media-grid,
+.thumb-grid,
+.image-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: var(--space-6);
+  margin-block: var(--space-6);
+}
+
+/* Each tile is the same height; images fill and crop using object-fit. */
+.gallery > figure,
+.media-grid > figure,
+.thumb-grid > figure,
+.gallery > a,
+.media-grid > a,
+.thumb-grid > a {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+  aspect-ratio: var(--card-aspect);
+  box-shadow: var(--shadow-1);
+  transition: transform .18s ease, border-color .18s ease;
+}
+
+.gallery > figure:hover,
+.media-grid > figure:hover,
+.thumb-grid > figure:hover,
+.gallery > a:hover,
+.media-grid > a:hover,
+.thumb-grid > a:hover {
+  transform: translateY(-3px);
+  border-color: #2a3547;
+}
+
+.gallery img,
+.media-grid img,
+.thumb-grid img,
+.gallery video,
+.media-grid video,
+.thumb-grid video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Optional variant: tall gallery tiles (use class="gallery gallery--tall") */
+.gallery--tall > figure,
+.gallery--tall > a { aspect-ratio: 3/4; }
+
+/* ------------------------------ Typography helpers ---------------------- */
+
+.lead { font-size: var(--step-1); color: var(--muted); }
+.kicker {
+  display: inline-block;
+  font-weight: 600;
+  font-size: var(--step--1);
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: var(--space-3);
+}
+
+/* Tag “chips” (e.g., Academic / Work / Extras nav pills if you use them) */
+.chips { display: flex; flex-wrap: wrap; gap: .5rem; }
+.chip {
+  display: inline-flex; align-items: center; gap: .4rem;
+  border: 1px solid var(--border);
+  background: var(--surface-2);
+  color: var(--muted);
+  border-radius: 999px;
+  padding: .35rem .7rem;
+  font-size: var(--step--1);
+}
+.chip--primary { color: var(--text); background: #222833; border-color: #2a3547; }
+
+/* Buttons (for CV link etc.) */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center;
+  gap: .5rem;
+  border: 1px solid transparent;
+  padding: .6rem .9rem;
+  border-radius: 12px;
+  font-weight: 600;
+  font-size: var(--step-0);
+  background: linear-gradient(135deg, var(--primary) 0%, var(--primary-600) 100%);
+  color: white;
+  box-shadow: 0 10px 24px rgba(139, 92, 246, .3);
+  transition: transform .15s ease, box-shadow .15s ease, filter .15s ease;
+}
+.btn:hover { transform: translateY(-2px); filter: brightness(1.04); }
+.btn:active { transform: translateY(0); }
+.btn--ghost {
+  background: transparent;
+  color: var(--text);
+  border-color: var(--border);
+  box-shadow: none;
+}
+.btn--ghost:hover { background: var(--surface-2); }
+
+/* ------------------------------ Footer ---------------------------------- */
+
+.site-footer {
+  border-top: 1px solid var(--border);
+  color: var(--muted);
+  padding: var(--space-7) 0;
+  margin-top: var(--space-9);
+  text-align: center;
+}
+
+/* ------------------------------ Utilities -------------------------------- */
+
+/* Content widths */
+.max-w-prose { max-width: 70ch; }
+.center { margin-inline: auto; }
+
+/* Safe area padding for mobile sticky headers */
+.safe-pad { padding-top: env(safe-area-inset-top); }
+
+/* Muted rule (thin separator) */
+.hr {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--border), transparent);
+  border: 0;
+  margin: var(--space-7) 0;
+}
+
+/* ------------------------------ Responsive tweaks ------------------------ */
+
+@media (max-width: 860px) {
+  .wrapper, .container { width: min(100%, 100% - 2 * var(--space-6)); }
+}
+
+@media (max-width: 560px) {
+  .cards, .card-grid, .project-grid, .projects, .tiles {
+    grid-template-columns: 1fr;
+    gap: var(--space-6);
+  }
+  .gallery, .media-grid, .thumb-grid, .image-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-5);
+  }
+}
+
+/* ------------------------------ Image edge cases ------------------------- */
+
+/* Hide completely empty <img> to avoid broken icon glyphs */
+img:not([src]), img[src=""] { display: none; }
+
+/* If someone put <a> around a card with only text, keep visual rhythm */
+.card:not(:has(.card-media, .project-thumb, .thumb, figure)) { padding-top: var(--space-5); }
+
+/* Make legacy tables (if any) readable on dark surfaces */
+table { border-collapse: collapse; width: 100%; background: var(--surface); border: 1px solid var(--border); }
+td, th { border: 1px solid var(--border); padding: .6rem .75rem; }
+th { background: var(--surface-2); text-align: left; color: var(--muted); }
