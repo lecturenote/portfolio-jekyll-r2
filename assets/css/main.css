@@ -1,374 +1,220 @@
 /* ==========================================================================
-   Oheneba – Dark Portfolio CSS (drop-in replacement)
-   File: assets/css/main.css
-   --------------------------------------------------------------------------
-   Design goals:
-   • Striking dark theme with crisp typography
-   • Uniform card thumbnails (same height) using aspect-ratio + object-fit
-   • Responsive, breathable grid with elegant hover "lift"
-   • Works with your existing markup (cards, project grids, galleries)
-   • Graceful placeholder when an image is missing
+   main.css — Dark, elegant portfolio skin (single-file, no deps)
    ========================================================================== */
 
-/* ------------------------------ Tokens ---------------------------------- */
-
-:root {
-  /* Color system */
-  --bg:             #0b0f14;
-  --surface:        #10151d;
-  --surface-2:      #151b25;
-  --border:         #1d2531;
-  --text:           #e9edf3;
-  --muted:          #a7b0bf;
-  --primary:        #8b5cf6;  /* violet */
-  --primary-600:    #7c3aed;
-  --accent:         #22d3ee;  /* cyan */
-  --focus:          #22d3ee;
-
-  /* Radii, shadows, spacing */
-  --radius:         14px;
-  --radius-sm:      10px;
-  --shadow-1:       0 8px 24px rgba(0,0,0,.35);
-  --shadow-2:       0 14px 40px rgba(0,0,0,.45);
-
-  /* Fluid type scale */
-  --step--1: clamp(.84rem, .82rem + .1vw, .9rem);
-  --step-0:  clamp(1.00rem, .96rem + .3vw, 1.125rem);
-  --step-1:  clamp(1.25rem, 1.06rem + .8vw, 1.5rem);
-  --step-2:  clamp(1.5rem,  1.2rem  + 1.4vw, 1.9rem);
-  --step-3:  clamp(1.9rem,  1.4rem  + 2.2vw, 2.4rem);
-  --step-4:  clamp(2.4rem,  1.9rem  + 3.0vw, 3.0rem);
-
-  /* Spacing scale */
-  --space-1: .25rem;
-  --space-2: .5rem;
-  --space-3: .75rem;
-  --space-4: 1rem;
-  --space-5: 1.25rem;
-  --space-6: 1.5rem;
-  --space-7: 2rem;
-  --space-8: 2.5rem;
-  --space-9: 3rem;
-
-  /* Card/media */
-  --card-aspect: 16/9; /* tune to 4/3, 3/2 if you prefer */
-}
-
-/* ------------------------------ Reset ----------------------------------- */
-
+/* ---------- Reset & base ---------- */
 *,
 *::before,
 *::after { box-sizing: border-box; }
 
-html { color-scheme: dark; }
+html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
 
-body {
+:root{
+  /* Colors */
+  --bg: #0b0f14;
+  --surface: #121823;
+  --surface-2: #0e141d;
+  --text: #e8edf2;
+  --muted: #a3afbd;
+  --accent: #8b7cff;      /* violet */
+  --accent-2: #2fd1b6;    /* teal */
+  --border-c: rgba(255,255,255,.08);
+  --shadow: 0 10px 28px rgba(0,0,0,.45), 0 2px 8px rgba(0,0,0,.3);
+
+  /* Layout / type */
+  --maxw: 1200px;
+  --radius: 14px;
+  --gap: clamp(14px, 3vw, 26px);
+  --pad: clamp(16px, 3.2vw, 32px);
+
+  --font: "Inter", system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Noto Sans",
+           "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+}
+
+/* Optional Google font (harmless if blocked) */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+
+body{
   margin: 0;
-  background: var(--bg);
   color: var(--text);
-  font-family: Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto,
-               Helvetica Neue, Arial, "Noto Sans", "Apple Color Emoji",
-               "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji", sans-serif;
-  line-height: 1.65;
+  background:
+    radial-gradient(1200px 700px at 90% -10%, rgba(139,124,255,.08), transparent 60%),
+    radial-gradient(900px 500px at -15% 110%, rgba(47,209,182,.06), transparent 55%),
+    var(--bg);
+  font: 400 16px/1.65 var(--font);
   -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
-  accent-color: var(--primary);
 }
 
-img, svg, video { max-width: 100%; display: block; }
-img { height: auto; }
+img, video { display: block; max-width: 100%; height: auto; }
 
-/* Remove link underlines but preserve accessible hover/focus */
-a { color: inherit; text-decoration: none; }
-a:hover { color: var(--primary); }
-a:focus-visible {
-  outline: 2px solid var(--focus);
-  outline-offset: 2px;
-  border-radius: var(--radius-sm);
-}
-
-/* ------------------------------ Layout ---------------------------------- */
-
-/* A centered content wrapper. If your templates already have one, this will enhance it. */
-.wrapper, .container {
-  width: min(1200px, 100% - 2 * var(--space-7));
-  margin-inline: auto;
-  padding-block: var(--space-7);
-}
-
-/* Page titles */
-h1 { font-size: var(--step-4); line-height: 1.15; margin: 0 0 var(--space-6); letter-spacing: .2px; }
-h2 { font-size: var(--step-2); margin: var(--space-7) 0 var(--space-4); }
-h3 { font-size: var(--step-1); margin: var(--space-5) 0 var(--space-3); }
-p, li { font-size: var(--step-0); color: var(--text); }
-.muted { color: var(--muted); }
-
-/* Sticky glass header (optional: matches your existing header if present) */
-.site-header {
-  position: sticky; top: 0; z-index: 50;
-  border-bottom: 1px solid var(--border);
-  background: rgba(11, 15, 20, .7);
-  backdrop-filter: blur(10px) saturate(1.1);
-}
-.site-header .site-nav a {
-  padding: .65rem .9rem; border-radius: 10px;
-}
-.site-header .site-nav a:hover,
-.site-header .site-nav a[aria-current="page"] {
-  background: var(--surface-2); color: var(--accent);
-}
-
-/* ------------------------------ Cards ----------------------------------- */
-
-/* Any of these container class names will render a responsive card grid.
-   (No HTML changes needed—this covers common names you already use.) */
-.cards,
-.card-grid,
-.project-grid,
-.projects,
-.tiles {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: var(--space-7);
-}
-
-/* Card frame */
-.card,
-article.card,
-.projects article,
-.project-card {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  overflow: hidden;
-  box-shadow: var(--shadow-1);
-  transition: transform .22s ease, box-shadow .22s ease, border-color .22s ease;
-}
-
-/* Hover lift */
-.card:hover,
-.projects article:hover,
-.project-card:hover {
-  transform: translateY(-6px);
-  box-shadow: var(--shadow-2);
-  border-color: #2a3547;
-}
-
-/* Uniform media area on cards (same height thumbnails) */
-.card-media,
-.project-thumb,
-.thumb,
-figure.thumb {
-  background: var(--surface-2);
-  aspect-ratio: var(--card-aspect);
-  overflow: hidden;
-}
-
-.card-media img,
-.project-thumb img,
-.thumb img,
-figure.thumb img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;         /* crops but keeps uniform sizing */
-  object-position: center;
-}
-
-/* If a card has no <img>, show a tasteful placeholder. Requires :has() (all modern browsers). */
-.card-media:not(:has(img))::after,
-.project-thumb:not(:has(img))::after,
-.thumb:not(:has(img))::after {
-  content: "No image";
-  color: var(--muted);
-  font-size: var(--step-0);
-  display: grid;
-  place-content: center;
-  width: 100%;
-  height: 100%;
-}
-
-/* Body of the card */
-.card-body,
-.project-body,
-article.card .content,
-.projects article .content {
-  padding: var(--space-5);
-}
-
-.card-title,
-.project-title,
-article.card h3,
-.projects article h3 {
-  margin: 0 0 .35rem 0;
-  font-size: var(--step-1);
+h1, h2, h3{
+  margin: 0 0 .6rem;
   font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: .2px;
+}
+h1{ font-size: clamp(1.9rem, 1.1rem + 2.8vw, 3.1rem); }
+h2{ font-size: clamp(1.35rem, .9rem + 1.6vw, 2rem); }
+h3{ font-size: clamp(1.05rem, .8rem + .8vw, 1.35rem); }
+
+p{ margin: 0 0 1rem; color: var(--muted); }
+
+a{
+  color: #c8c2ff;
+  text-decoration: none;
+  transition: color .15s ease, background-color .15s ease, border-color .15s ease;
+  text-underline-offset: .2em; text-decoration-thickness: .08em;
+}
+a:hover{ color: #e5e2ff; text-decoration: underline; }
+:focus-visible{ outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 6px; }
+
+/* ---------- Global wrappers ---------- */
+.container, .wrapper, .page-content, main{
+  max-width: var(--maxw);
+  margin-inline: auto;
+  padding-inline: var(--pad);
+  padding-block: calc(var(--pad) * .75);
 }
 
-.card-desc,
-.projects article p,
-article.card p {
-  margin: 0;
+/* Top link row / breadcrumbs (your "Home Academic Work Extras") */
+nav, .site-nav, .breadcrumbs{
+  display: flex; gap: .5rem; flex-wrap: wrap;
+  margin-bottom: 1rem;
+}
+nav a, .site-nav a, .breadcrumbs a{
   color: var(--muted);
+  background: rgba(255,255,255,.05);
+  padding: .45rem .7rem; border-radius: 10px; border: 1px solid var(--border-c);
 }
-
-/* ------------------------------ Galleries -------------------------------- */
-
-/* Any of these container names render a clean, even gallery grid. */
-.gallery,
-.media-grid,
-.thumb-grid,
-.image-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-  gap: var(--space-6);
-  margin-block: var(--space-6);
-}
-
-/* Each tile is the same height; images fill and crop using object-fit. */
-.gallery > figure,
-.media-grid > figure,
-.thumb-grid > figure,
-.gallery > a,
-.media-grid > a,
-.thumb-grid > a {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  overflow: hidden;
-  aspect-ratio: var(--card-aspect);
-  box-shadow: var(--shadow-1);
-  transition: transform .18s ease, border-color .18s ease;
-}
-
-.gallery > figure:hover,
-.media-grid > figure:hover,
-.thumb-grid > figure:hover,
-.gallery > a:hover,
-.media-grid > a:hover,
-.thumb-grid > a:hover {
-  transform: translateY(-3px);
-  border-color: #2a3547;
-}
-
-.gallery img,
-.media-grid img,
-.thumb-grid img,
-.gallery video,
-.media-grid video,
-.thumb-grid video {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-/* Optional variant: tall gallery tiles (use class="gallery gallery--tall") */
-.gallery--tall > figure,
-.gallery--tall > a { aspect-ratio: 3/4; }
-
-/* ------------------------------ Typography helpers ---------------------- */
-
-.lead { font-size: var(--step-1); color: var(--muted); }
-.kicker {
-  display: inline-block;
-  font-weight: 600;
-  font-size: var(--step--1);
-  letter-spacing: .12em;
-  text-transform: uppercase;
-  color: var(--accent);
-  margin-bottom: var(--space-3);
-}
-
-/* Tag “chips” (e.g., Academic / Work / Extras nav pills if you use them) */
-.chips { display: flex; flex-wrap: wrap; gap: .5rem; }
-.chip {
-  display: inline-flex; align-items: center; gap: .4rem;
-  border: 1px solid var(--border);
-  background: var(--surface-2);
-  color: var(--muted);
-  border-radius: 999px;
-  padding: .35rem .7rem;
-  font-size: var(--step--1);
-}
-.chip--primary { color: var(--text); background: #222833; border-color: #2a3547; }
-
-/* Buttons (for CV link etc.) */
-.btn {
-  display: inline-flex; align-items: center; justify-content: center;
-  gap: .5rem;
-  border: 1px solid transparent;
-  padding: .6rem .9rem;
-  border-radius: 12px;
-  font-weight: 600;
-  font-size: var(--step-0);
-  background: linear-gradient(135deg, var(--primary) 0%, var(--primary-600) 100%);
-  color: white;
-  box-shadow: 0 10px 24px rgba(139, 92, 246, .3);
-  transition: transform .15s ease, box-shadow .15s ease, filter .15s ease;
-}
-.btn:hover { transform: translateY(-2px); filter: brightness(1.04); }
-.btn:active { transform: translateY(0); }
-.btn--ghost {
-  background: transparent;
+nav a:hover, .site-nav a:hover, .breadcrumbs a:hover{
   color: var(--text);
-  border-color: var(--border);
-  box-shadow: none;
+  background: rgba(139,124,255,.16);
+  border-color: rgba(139,124,255,.4);
 }
-.btn--ghost:hover { background: var(--surface-2); }
 
-/* ------------------------------ Footer ---------------------------------- */
+/* ==========================================================================
+   Card grids (index pages)
+   ========================================================================== */
 
-.site-footer {
-  border-top: 1px solid var(--border);
+/* Works with .cards, .card-grid, .projects, or any class containing "grid/cards" */
+.cards, .card-grid, .projects, [class*="grid"], [class*="cards"]{
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: var(--gap);
+  align-items: start;
+}
+
+/* Accepts .card, .project-card, .project, .tile, article.project-card */
+.card, .project-card, .project, .tile, article.project-card{
+  background: linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.02));
+  border: 1px solid var(--border-c);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+  display: flex; flex-direction: column; min-height: 100%;
+  transition: transform .25s ease, box-shadow .25s ease, border-color .25s ease;
+}
+.card:hover, .project-card:hover, .project:hover, .tile:hover{
+  transform: translateY(-4px);
+  border-color: rgba(139,124,255,.45);
+  box-shadow:
+    0 16px 40px rgba(0,0,0,.50),
+    0 6px 16px rgba(139,124,255,.12);
+}
+
+/* Uniform cover image for every card */
+.card .media, .project-card .thumb, .project .thumb, .tile .thumb, .card figure{
+  position: relative; margin: 0;
+  aspect-ratio: 16/9;               /* equal-height covers across grid */
+  background: var(--surface-2);
+  overflow: hidden;
+  border-bottom: 1px solid var(--border-c);
+}
+.card .media > img,
+.project-card .thumb > img,
+.project .thumb > img,
+.tile .thumb > img,
+.card figure > img{
+  width: 100%; height: 100%;
+  object-fit: cover;                 /* fills without distortion */
+  transform: scale(1.01);
+  transition: transform .5s ease, filter .5s ease;
+}
+.card:hover .media > img,
+.project-card:hover .thumb > img,
+.project:hover .thumb > img,
+.tile:hover .thumb > img{
+  transform: scale(1.06);
+  filter: saturate(1.08) contrast(1.04);
+}
+
+.card .content, .project-card .content, .tile .content{
+  padding: 16px 18px 18px;
+  display: grid; gap: .45rem; flex: 1;
+}
+.card .meta{ color: var(--muted); font-size: .9rem; }
+
+/* ==========================================================================
+   Galleries on detail pages (uniform rows)
+   ========================================================================== */
+
+/* Works with .gallery, .media-grid, .image-grid, .project-gallery, .project-images */
+.gallery, .media-grid, .image-grid, .project-gallery, .project-images{
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+  gap: clamp(12px, 2.6vw, 18px);
+  margin-top: .75rem;
+}
+.gallery img, .media-grid img, .image-grid img,
+.project-gallery img, .project-images img,
+.gallery video, .media-grid video, .image-grid video{
+  width: 100%;
+  aspect-ratio: 4/3;         /* EVERY tile same footprint (no giant+tiny mismatch) */
+  object-fit: cover;
+  border-radius: 12px;
+  border: 1px solid var(--border-c);
+  background: var(--surface-2);
+  box-shadow: 0 6px 18px rgba(0,0,0,.35);
+}
+
+/* If a specific item should letterbox instead of crop, add class="contain" to that img/video */
+.contain{ object-fit: contain !important; background: #0b0f14; }
+
+/* Videos look like images */
+video{ border-radius: 12px; }
+
+/* ==========================================================================
+   About / avatar
+   ========================================================================== */
+.avatar, img[alt*="profile" i], img[alt*="avatar" i]{
+  width: 104px; height: 104px; border-radius: 50%;
+  object-fit: cover; border: 2px solid rgba(255,255,255,.12);
+}
+
+/* ==========================================================================
+   Footer
+   ========================================================================== */
+footer, .site-footer{
+  border-top: 1px solid var(--border-c);
+  margin-top: var(--pad);
+  padding-top: 12px;
   color: var(--muted);
-  padding: var(--space-7) 0;
-  margin-top: var(--space-9);
-  text-align: center;
+  font-size: .95rem;
 }
 
-/* ------------------------------ Utilities -------------------------------- */
+/* Misc */
+hr{ border: none; height: 1px; background: var(--border-c); margin: 1.4rem 0; }
+.muted{ color: var(--muted); }
+.center{ text-align: center; }
 
-/* Content widths */
-.max-w-prose { max-width: 70ch; }
-.center { margin-inline: auto; }
-
-/* Safe area padding for mobile sticky headers */
-.safe-pad { padding-top: env(safe-area-inset-top); }
-
-/* Muted rule (thin separator) */
-.hr {
-  height: 1px;
-  background: linear-gradient(90deg, transparent, var(--border), transparent);
-  border: 0;
-  margin: var(--space-7) 0;
+/* Responsive polish */
+@media (max-width: 780px){
+  nav, .site-nav, .breadcrumbs{ gap: .4rem; }
+  .card .content{ padding: 14px 14px 16px; }
 }
 
-/* ------------------------------ Responsive tweaks ------------------------ */
-
-@media (max-width: 860px) {
-  .wrapper, .container { width: min(100%, 100% - 2 * var(--space-6)); }
+/* Respect reduced motion */
+@media (prefers-reduced-motion: reduce){
+  *{ animation: none !important; transition: none !important; }
 }
-
-@media (max-width: 560px) {
-  .cards, .card-grid, .project-grid, .projects, .tiles {
-    grid-template-columns: 1fr;
-    gap: var(--space-6);
-  }
-  .gallery, .media-grid, .thumb-grid, .image-grid {
-    grid-template-columns: 1fr 1fr;
-    gap: var(--space-5);
-  }
-}
-
-/* ------------------------------ Image edge cases ------------------------- */
-
-/* Hide completely empty <img> to avoid broken icon glyphs */
-img:not([src]), img[src=""] { display: none; }
-
-/* If someone put <a> around a card with only text, keep visual rhythm */
-.card:not(:has(.card-media, .project-thumb, .thumb, figure)) { padding-top: var(--space-5); }
-
-/* Make legacy tables (if any) readable on dark surfaces */
-table { border-collapse: collapse; width: 100%; background: var(--surface); border: 1px solid var(--border); }
-td, th { border: 1px solid var(--border); padding: .6rem .75rem; }
-th { background: var(--surface-2); text-align: left; color: var(--muted); }
