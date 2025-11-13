@@ -1,12 +1,11 @@
 ---
 title: Pedal‑Powered Maize Sheller
 category: extras
-order: 2
 summary: Proof‑of‑concept and fabrication.
+cover_file: "maize1.png"
 gallery_files:
-  - maize1.jpg
-  - maize2.jpg
-  - maize3.jpg
+  - "maize1.png"
+  - "maize2.png"
+  - "maize3.png"
 ---
-
-Short description here. Replace or expand with your own narrative and results.
+From sketch to fabricated proof for a pedal‑powered sheller.

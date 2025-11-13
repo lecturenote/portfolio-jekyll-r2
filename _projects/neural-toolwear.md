@@ -1,12 +1,11 @@
 ---
 title: Neural Network Toolwear Prediction
 category: academic
-order: 6
 summary: Prediction pipeline with classical ML as a baseline.
+cover_file: "Toolwear.png"
 gallery_files:
-  - Toolwear.jpg
-  - Screenshot 2024-02-25 122325.jpg
-  - Screenshot 2024-02-25 123215.jpg
+  - "Toolwear.png"
+  - "Screenshot 2024-02-25 123430.png"
+  - "Screenshot 2024-02-25 122802.png"
 ---
-
-Short description here. Replace or expand with your own narrative and results.
+Classical ML baselines and graphics for wear prediction.

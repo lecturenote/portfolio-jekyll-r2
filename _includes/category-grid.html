@@ -2,20 +2,20 @@
 <div class="grid cards">
   {% for p in items %}
     <a class="card" href="{{ p.url | relative_url }}">
-      {% assign thumb = p.thumbnail %}
-
-      {% if p.thumbnail_file and site.r2_base %}
+      {%- assign thumb = nil -%}
+      {% if p.thumbnail %}{% assign thumb = p.thumbnail %}{% endif %}
+      {% if thumb == nil and p.thumbnail_file and site.r2_base %}
         {% capture thumb %}{{ site.r2_base }}/{{ p.thumbnail_file | uri_escape }}{% endcapture %}
-      {% elsif p.cover_file and site.r2_base %}
+      {% endif %}
+      {% if thumb == nil and p.cover_file and site.r2_base %}
         {% capture thumb %}{{ site.r2_base }}/{{ p.cover_file | uri_escape }}{% endcapture %}
-      {% elsif p.gallery_files and p.gallery_files.size > 0 and site.r2_base %}
+      {% endif %}
+      {% if thumb == nil and p.gallery_files and p.gallery_files.size > 0 and site.r2_base %}
         {% capture thumb %}{{ site.r2_base }}/{{ p.gallery_files[0] | uri_escape }}{% endcapture %}
       {% endif %}
-
-      {% if thumb and thumb != '' %}
+      {% if thumb %}
         <img src="{{ thumb }}" alt="{{ p.title }}" loading="lazy">
       {% endif %}
-
       <div class="card-body">
         <h3>{{ p.title }}</h3>
         {% if p.summary %}<p>{{ p.summary }}</p>{% endif %}

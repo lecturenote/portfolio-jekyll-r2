@@ -1,11 +1,10 @@
 ---
 title: Vertical Car Storage System
 category: academic
-order: 2
 summary: Concept + calculations for a compact lift-and-park system.
+cover_file: "car storage.png"
 gallery_files:
-  - car storage.jpg
-  - calc.jpg
+  - "car storage.png"
+  - "calc.png"
 ---
-
-Short description here. Replace or expand with your own narrative and results.
+Concept sketches and analysis for vertical car storage.

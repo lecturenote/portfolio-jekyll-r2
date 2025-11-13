@@ -1,10 +1,14 @@
 ---
 title: EV Charger Assembly (FlexSim)
 category: academic
-order: 4
 summary: Throughput analysis and workstation balancing in FlexSim.
-poster_file: 22 - Flexsim.mp4
-video_file: 22 - Flexsim.mp4
+video_file: "22 - Flexsim.mp4"
+thumbnail_file: "Screenshot 2024-02-25 101122.png"
+gallery_files:
+  - "Screenshot 2024-02-25 101122.png"
+  - "Screenshot 2024-02-25 101951.png"
+  - "Screenshot 2024-02-25 123225.png"
+  - "Screenshot 2024-02-25 123215.png"
+  - "Screenshot 2024-02-25 124021.png"
 ---
-
-Short description here. Replace or expand with your own narrative and results.
+Assembly-line simulation and balancing study in FlexSim.

@@ -1,12 +1,11 @@
 ---
 title: Arduino Braccio
 category: academic
-order: 5
-summary: Simple pick‑and‑place experiments and control.
-video_file: 26 - Arduino Braccio.mp4
+summary: Simple pick-and-place experiments and control.
+thumbnail_file: "robo.png"
 gallery_files:
-  - robo.jpg
-  - robo2.jpg
+  - "robo.png"
+  - "robo2.png"
+  - "26 - Arduino Braccio.mp4"
 ---
-
-Short description here. Replace or expand with your own narrative and results.
+Experiments with Arduino Braccio and custom fixtures.

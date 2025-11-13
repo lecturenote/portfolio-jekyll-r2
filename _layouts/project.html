@@ -13,9 +13,8 @@ layout: default
     </ul>
 
     {%- assign cover_url = nil -%}
-    {% if page.cover %}
-      {% assign cover_url = page.cover %}
-    {% elsif page.cover_file and r2 != '' %}
+    {% if page.cover %}{% assign cover_url = page.cover %}{% endif %}
+    {% if cover_url == nil and page.cover_file and r2 != '' %}
       {% capture cover_url %}{{ r2 }}/{{ page.cover_file | uri_escape }}{% endcapture %}
     {% endif %}
     {% if cover_url %}
@@ -35,7 +34,7 @@ layout: default
       {% if url %}
         {% assign firstchar = url | slice: 0, 1 %}
         {% if url contains '://' or firstchar == '/' %}
-          {# absolute URL; use as-is #}
+          {# absolute or path; keep as-is #}
         {% elsif r2 != '' %}
           {% capture url %}{{ r2 }}/{{ item | uri_escape }}{% endcapture %}
         {% endif %}
@@ -45,14 +44,6 @@ layout: default
   </section>
   {% endif %}
 
-  {% assign poster_url = nil %}
-  {% if page.poster %}
-    {% assign poster_url = page.poster %}
-  {% elsif page.poster_file and r2 != '' %}
-    {% capture poster_url %}{{ r2 }}/{{ page.poster_file | uri_escape }}{% endcapture %}
-  {% endif %}
-
-  {% assign video_url = nil %}
   {% if page.youtube_id %}
     <section class="project-video">
       <div class="video-embed">
@@ -64,25 +55,24 @@ layout: default
       </div>
     </section>
   {% else %}
-    {% if page.video %}
-      {% assign video_url = page.video %}
-    {% elsif page.video_file and r2 != '' %}
+    {% assign poster_url = nil %}
+    {% if page.poster %}{% assign poster_url = page.poster %}{% endif %}
+    {% if poster_url == nil and page.poster_file and r2 != '' %}
+      {% capture poster_url %}{{ r2 }}/{{ page.poster_file | uri_escape }}{% endcapture %}
+    {% endif %}
+
+    {% assign video_url = nil %}
+    {% if page.video %}{% assign video_url = page.video %}{% endif %}
+    {% if video_url == nil and page.video_file and r2 != '' %}
       {% capture video_url %}{{ r2 }}/{{ page.video_file | uri_escape }}{% endcapture %}
     {% endif %}
-    {% if video_url %}
-      {% assign vtype = 'video/mp4' %}
-      {% if video_url contains '.mov' or video_url contains '.MOV' %}
-        {% assign vtype = 'video/quicktime' %}
-      {% elsif video_url contains '.mpeg' or video_url contains '.mpg' %}
-        {% assign vtype = 'video/mpeg' %}
-      {% endif %}
 
-      <section class="project-video">
-        <video controls preload="metadata"{% if poster_url %} poster="{{ poster_url }}"{% endif %}>
-          <source src="{{ video_url }}" type="{{ vtype }}">
-          Your browser does not support the video tag.
-        </video>
-      </section>
+    {% if video_url %}
+    <section class="project-video">
+      <video controls preload="metadata"{% if poster_url %} poster="{{ poster_url }}"{% endif %}>
+        <source src="{{ video_url }}" type="video/mp4">
+      </video>
+    </section>
     {% endif %}
   {% endif %}
 </article>

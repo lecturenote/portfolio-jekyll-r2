@@ -1,13 +1,14 @@
 ---
 title: Affordable Solar Streetlight
 category: work
-order: 1
 summary: CAD, drawings, and early renderings.
+cover_file: "illuminate 101.png"
 gallery_files:
-  - illuminate 101.png
-  - Illuminate 102.png
-  - illuminate 103.png
-  - illuminate 104.png
+  - "illuminate 101.png"
+  - "illuminate 102.png"
+  - "illuminate 103.png"
+  - "illuminate 104.png"
+  - "solar streetlight.jfif.jpg"
+# video_file: "74 - Illuminate promo.mp4"   # uncomment for inline video (MP4 is best)
 ---
-
-Short description here. Replace or expand with your own narrative and results.
+Design and render studies for a low‑cost solar streetlight.

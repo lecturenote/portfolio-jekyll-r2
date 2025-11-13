@@ -1,12 +1,10 @@
 ---
 title: Industrial Table DFMA
 category: academic
-order: 7
-summary: As‑is components, redesign, and assembly time calculation.
+summary: As-is components, redesign, and assembly time calculation.
+cover_file: "DFMA components.png"
 gallery_files:
-  - DFMA components.jpg
-  - Assembly time calc.jpg
-  - Screenshot 2024-02-25 101122.jpg
+  - "DFMA components.png"
+  - "Assembly time calc.png"
 ---
-
-Short description here. Replace or expand with your own narrative and results.
+DFMA views and assembly-time analysis for an industrial table.

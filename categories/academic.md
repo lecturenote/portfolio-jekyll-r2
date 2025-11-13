@@ -3,5 +3,6 @@ layout: default
 title: Academic Projects
 permalink: /academic/
 ---
-<h1>{{ page.title }}</h1>
+
+# Academic Projects
 {% include category-grid.html category="academic" %}
